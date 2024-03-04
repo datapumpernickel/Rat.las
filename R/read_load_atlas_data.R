@@ -4,13 +4,12 @@
 #' and saves them to a specified directory. It checks the validity of `digits` and
 #' `years` parameters before proceeding with the download. Requires an environment
 #' variable `DATAVERSE_KEY` for API access.
-#'
 #' @param digits An integer indicating the level of digit classification of the dataset (2, 4, or 6).
 #' @param years A vector of integers indicating the years of interest (between 1995 and 2021).
 #' @param dir A character string specifying the directory path where datasets should be saved.
 #' @param key Your API key from the Harvard Dataverse.
 #' @return Invisible NULL. The function is called for its side effect: downloading and saving datasets.
-@export
+#' @export
 download_dataverse_atlas <- function(digits, years, dir, key = Sys.getenv("DATAVERSE_KEY")) {
   label <- NULL
   checkmate::assert_choice(digits, choices = c(2, 4, 6))
