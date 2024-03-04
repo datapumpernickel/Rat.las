@@ -8,15 +8,16 @@
 #' @param digits An integer indicating the level of digit classification of the dataset (2, 4, or 6).
 #' @param years A vector of integers indicating the years of interest (between 1995 and 2021).
 #' @param dir A character string specifying the directory path where datasets should be saved.
+#' @param key Your API key from the Harvard Dataverse.
 #' @return Invisible NULL. The function is called for its side effect: downloading and saving datasets.
 #' @export
-download_dataverse_atlas <- function(digits, years, dir) {
+download_dataverse_atlas <- function(digits, years, dir, key = Sys.getenv("DATAVERSE_KEY")) {
   label <- NULL
   checkmate::assert_choice(digits, choices = c(2, 4, 6))
   checkmate::assert_subset(years, choices = c(1995:2021))
   datasets <-
     httr2::request("https://dataverse.harvard.edu/api/datasets/3425423/versions/:latest/files") |>
-    httr2::req_headers("X-Dataverse-key" = Sys.getenv("DATAVERSE_KEY")) |>
+    httr2::req_headers("X-Dataverse-key" = key) |>
     httr2::req_perform() |>
     httr2::resp_body_json(simplifyVector = TRUE) |>
     purrr::pluck("data") |>
@@ -37,7 +38,7 @@ download_dataverse_atlas <- function(digits, years, dir) {
             "https://dataverse.harvard.edu/api/access/datafile/{datasets$id[i]}"
           )
         ) |>
-        httr2::req_headers("X-Dataverse-key" = Sys.getenv("DATAVERSE_KEY")) |>
+        httr2::req_headers("X-Dataverse-key" = key) |>
         httr2::req_perform() |>
         httr2::resp_body_raw() |>
         base::writeBin(file)
