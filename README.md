@@ -7,7 +7,7 @@
 <!-- badges: end -->
 
 The goal of Rat.las is to easily load into your project the data of the
-atlas of economic complexity.
+[Atlas of Economic Complexity](https://atlas.cid.harvard.edu/).
 
 ## Installation
 

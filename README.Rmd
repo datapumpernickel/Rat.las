@@ -18,8 +18,8 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of Rat.las is to easily load into your project the data of the atlas of
-economic complexity. 
+The goal of Rat.las is to easily load into your project the data of the [Atlas of
+Economic Complexity](https://atlas.cid.harvard.edu/). 
 
 ## Installation
 

@@ -10,7 +10,7 @@
 #' @param dir A character string specifying the directory path where datasets should be saved.
 #' @param key Your API key from the Harvard Dataverse.
 #' @return Invisible NULL. The function is called for its side effect: downloading and saving datasets.
-#' @export
+@export
 download_dataverse_atlas <- function(digits, years, dir, key = Sys.getenv("DATAVERSE_KEY")) {
   label <- NULL
   checkmate::assert_choice(digits, choices = c(2, 4, 6))
