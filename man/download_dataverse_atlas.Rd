@@ -4,7 +4,7 @@
 \alias{download_dataverse_atlas}
 \title{Download Dataset from Dataverse}
 \usage{
-download_dataverse_atlas(digits, years, dir)
+download_dataverse_atlas(digits, years, dir, key = Sys.getenv("DATAVERSE_KEY"))
 }
 \arguments{
 \item{digits}{An integer indicating the level of digit classification of the dataset (2, 4, or 6).}
@@ -12,6 +12,8 @@ download_dataverse_atlas(digits, years, dir)
 \item{years}{A vector of integers indicating the years of interest (between 1995 and 2021).}
 
 \item{dir}{A character string specifying the directory path where datasets should be saved.}
+
+\item{key}{Your API key from the Harvard Dataverse.}
 }
 \value{
 Invisible NULL. The function is called for its side effect: downloading and saving datasets.
@@ -21,7 +23,4 @@ Downloads datasets from Dataverse according to specified digit level and years,
 and saves them to a specified directory. It checks the validity of \code{digits} and
 \code{years} parameters before proceeding with the download. Requires an environment
 variable \code{DATAVERSE_KEY} for API access.
-}
-\examples{
-download_dataverse_atlas(digits = 4, years = 2010:2021, dir = "01_raw_data/aec")
 }

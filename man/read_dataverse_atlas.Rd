@@ -22,6 +22,3 @@ A data frame containing combined data from all matched .dta files.
 Reads .dta files matching specified digit level and years from a directory into a single data frame.
 It performs an error check to ensure there are files matching the query before attempting to read them.
 }
-\examples{
-read_dataverse_atlas(digits = 4, years = 2010:2021, dir = "01_raw_data/aec")
-}
