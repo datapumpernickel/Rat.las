@@ -4,21 +4,31 @@
 \alias{read_dataverse_atlas}
 \title{Read Dataset Files from Directory}
 \usage{
-read_dataverse_atlas(digits, years, dir, workers = 10)
+read_dataverse_atlas(
+  digits,
+  years,
+  dir = rappdirs::user_cache_dir("rat_las"),
+  workers = future::availableCores()
+)
 }
 \arguments{
-\item{digits}{An integer indicating the level of digit classification of the dataset (2, 4, or 6).}
+\item{digits}{An integer indicating the level of digit classification
+of the dataset (2, 4, or 6).}
 
 \item{years}{A vector of integers indicating the years of interest.}
 
-\item{dir}{A character string specifying the directory path where datasets are located.}
+\item{dir}{A character string specifying the directory path where
+datasets are located.}
 
-\item{workers}{An integer specifying the number of workers to use for parallel processing (default is 10).}
+\item{workers}{An integer specifying the number of workers
+to use for parallel processing (default is all available cores).}
 }
 \value{
 A data frame containing combined data from all matched .dta files.
 }
 \description{
-Reads .dta files matching specified digit level and years from a directory into a single data frame.
-It performs an error check to ensure there are files matching the query before attempting to read them.
+Reads .dta files matching specified digit level and years from a directory
+into a single data frame.
+It performs an error check to ensure there are files matching the query
+before attempting to read them.
 }

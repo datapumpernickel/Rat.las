@@ -26,23 +26,39 @@ download_dataverse_atlas <-
   checkmate::assert_choice(digits, choices = c(2, 4, 6))
   checkmate::assert_subset(years, choices = c(1995:2021))
 
-  if(is.null(dir)){
-    dir <- rappdirs::user_cache_dir("rat_las")
+
+  dir.create(dir, showWarnings = FALSE, recursive = TRUE)
+
+
+  if(digits == 2){
+    datasets <-
+      httr2::request("https://dataverse.harvard.edu/api/datasets/3425423/versions/:latest/files") |>
+      httr2::req_headers("X-Dataverse-key" = key) |>
+      httr2::req_perform() |>
+      httr2::resp_body_json(simplifyVector = TRUE) |>
+      purrr::pluck("data") |>
+      tidyr::unnest(cols = "dataFile", names_repair = "unique") |>
+      dplyr::filter(
+        stringr::str_detect(label, stringr::str_c(digits, "digit")) &
+          stringr::str_detect(label, "partner") &
+          stringr::str_detect(label, "dta")
+      )
+  } else {
+    datasets <-
+      httr2::request("https://dataverse.harvard.edu/api/datasets/3425423/versions/:latest/files") |>
+      httr2::req_headers("X-Dataverse-key" = key) |>
+      httr2::req_perform() |>
+      httr2::resp_body_json(simplifyVector = TRUE) |>
+      purrr::pluck("data") |>
+      tidyr::unnest(cols = "dataFile", names_repair = "unique") |>
+      dplyr::filter(
+        stringr::str_detect(label, stringr::str_c(digits, "digit")) &
+          stringr::str_detect(label, "partner") &
+          stringr::str_detect(label, "dta") &
+          stringr::str_detect(label, stringr::str_c(years, collapse = "|"))
+      )
   }
 
-  datasets <-
-    httr2::request("https://dataverse.harvard.edu/api/datasets/3425423/versions/:latest/files") |>
-    httr2::req_headers("X-Dataverse-key" = key) |>
-    httr2::req_perform() |>
-    httr2::resp_body_json(simplifyVector = TRUE) |>
-    purrr::pluck("data") |>
-    tidyr::unnest(cols = "dataFile", names_repair = "unique") |>
-    dplyr::filter(
-      stringr::str_detect(label, stringr::str_c(digits, "digit")) &
-        stringr::str_detect(label, "partner") &
-        stringr::str_detect(label, "dta") &
-        stringr::str_detect(label, stringr::str_c(years, collapse = "|"))
-    )
 
   for (i in cli::cli_progress_along(datasets$id)) {
     file <- file.path(dir, stringr::str_c(datasets$label[i]))
@@ -84,11 +100,21 @@ read_dataverse_atlas <- function(digits,
 
   files <- list.files(dir, full.names = TRUE)
 
-  file_set <-
-    files[stringr::str_detect(files, stringr::str_c(digits, "digit")) &
-            stringr::str_detect(files, "partner") &
-            stringr::str_detect(files, "dta") &
-            stringr::str_detect(files, stringr::str_c(years, collapse = "|"))]
+  if(digits==2){
+    file_set <-
+      files[stringr::str_detect(files, stringr::str_c(digits, "digit")) &
+              stringr::str_detect(files, "partner") &
+              stringr::str_detect(files, "dta") ]
+  } else {
+    file_set <-
+      files[stringr::str_detect(files, stringr::str_c(digits, "digit")) &
+              stringr::str_detect(files, "partner") &
+              stringr::str_detect(files, "dta") &
+              stringr::str_detect(files, stringr::str_c(years, collapse = "|"))]
+  }
+
+
+
 
   if (length(file_set) < 1) {
     rlang::abort("There are no files matching your query.")
