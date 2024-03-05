@@ -19,7 +19,7 @@ Imports:
     haven,
     httr2,
     purrr,
+    rappdirs,
     rlang,
     stringr,
     tidyr
-
